@@ -1,6 +1,7 @@
 # csv geodata filter
 
 	- filters geodata stored in csv filetypes by their haversine distance from a given coordinate
+	- edit coords, radius, datafile in script and run
 
 ## possible future expansions:
 
