@@ -33,7 +33,7 @@ data = df[df['distance'] < radius**2]
 
 # filter out 'problem_types'
 #data = data[data['problem_type'] == ('HEF' | 'P' | 'VO')]
-data = data[data['problem_type'] == 'VO']
+data = data[(data['problem_type'] == 'HEF') | (data['problem_type'] == 'P') | (data['problem_type'] == 'VO')]
 
 data.to_csv('out.csv')
 print('Successfully generated out.csv')
