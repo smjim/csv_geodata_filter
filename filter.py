@@ -4,16 +4,18 @@ import numpy as np
 import re
 
 # load waypoints from .gpx file into np arr `combined`
-GPXfile = '../../data/GraphHopper.gpx' 
+#GPXfile = '../../data/GraphHopper.gpx' 
+GPXfile = '../../data/waypoints.gpx' 
 waypoints = open(GPXfile).read()
 lat = np.array(re.findall(r'lat="([^"]+)',waypoints),dtype=float)
 lon = np.array(re.findall(r'lon="([^"]+)',waypoints),dtype=float)
 combined = np.array(list(zip(lat,lon)))
 # points of interest
 poi = pd.read_csv('../../data/mines_data.csv', index_col=0)
+#poi = pd.read_csv('../../data/points_of_interest.csv', index_col=0)
 
 # exclusion radius
-radius = 20.0 #kilometers
+radius = 10.0 #kilometers
 
 # use haversine formula to calculate distance between given and data coords
 # function from Michael Dunn (stackoverflow)
@@ -41,16 +43,20 @@ def filter_data(pos):
 	x = pos[0]
 	y = pos[1]
 	poi['distance'] = poi.apply(lambda row : haversine(row['longitude'], row['latitude'], y, x), axis = 1)
-	filtered = filtered.append(poi[poi['distance'] < radius])
-	print(filtered)
+	tmp = poi[poi['distance'] < radius]
+	filtered = filtered.append(tmp)
+	print(tmp.size, ", ", tmp['state_tribe'].unique())
 
 np.apply_along_axis(filter_data, axis=1, arr=combined)
 
 # filter out 'problem_types'
 filtered = filtered[(filtered['problem_type'] == 'HEF') | (filtered['problem_type'] == 'P') | (filtered['problem_type'] == 'VO')]
 
-# eliminate duplicates
-filtered.drop_duplicates()
+# eliminate duplicates, ignoring distance
+#filtered.drop_duplicates()
+#filtered.drop_duplicates(subset=filtered.columns.difference(['distance']))
+filtered.drop_duplicates(subset=['latitude','longitude'])
+print(filtered)
 
 filtered.to_csv('out.csv')
 print('Successfully generated out.csv')

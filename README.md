@@ -9,10 +9,18 @@
 ## howto:
 
  1. make a route using [GraphHopper](https://graphhopper.com/maps/)
- 2. export route to .gpx file format by hitting the `gpx` button below waypoint input
- 3. edit `filter.py` to include all the necessary files (GPXfile, poi file)
- 4. run `filter.py`
- 5. view output as csv or graphically with [umap](https://umap.openstreetmap.fr/es/map/new/) (`ctrl+I` import out.csv)
+ 2. export route to .gpx file format by hitting the `gpx` button below waypoint input, and selecting the `track` checkbox
+ 3. export points of interest data to .csv filetype
+	if using overpass-turbo data mining utility, export data as .gpx & convert to .csv with gpx_converter:
+	```
+	$ pip install gpx-converter
+	$ python3
+	>>> from gpx_converter import Converter
+	>>> Converter(input_file='sample.gpx').gpx_to_csv(output_file='output.csv')
+	```
+ 4. edit `filter.py` to include all the necessary files (GPXfile, poi file)
+ 5. run `filter.py`
+ 6. view output as csv or graphically with [umap](https://umap.openstreetmap.fr/es/map/new/) (`ctrl+I` import out.csv)
 
 ## possible future expansions:
 
@@ -22,6 +30,9 @@
 ## further info:
 
  - data for this project from [skytruth](https://skytruth.org/2015/10/mapping-abandoned-coal-mines/)
+ - additional geodata can be obtained through the [overpass-turbo](https://overpass-turbo.eu/) utility
+	- [guide](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example)
+	- [example map features](https://wiki.openstreetmap.org/wiki/ES:Objetos_del_mapa)
  - openstreetmap.org
  - [haversine formula derivation](https://web.archive.org/web/20200120134215/http://mathforum.org/library/drmath/view/51879.html)
  - [AMLIS database](https://www.osmre.gov/programs/e-amlis)
