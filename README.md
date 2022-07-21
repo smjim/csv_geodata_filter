@@ -3,13 +3,16 @@
  - filters geodata stored in csv filetypes by their haversine distance from a given coordinate
  - edit coords, radius, datafile in script and run
 
+![imagen](https://user-images.githubusercontent.com/78174712/180298550-7f5bee8b-0a2a-4b86-9c32-b94272738f5d.png)
+[view fullscreen](umap.openstreetmap.fr/es/map/canada-trip_790135)
+
 ## howto:
 
  1. make a route using [GraphHopper](https://graphhopper.com/maps/)
  2. export route to .gpx file format by hitting the `gpx` button below waypoint input
- 3. edit `filter.py` to include all the necessary files
+ 3. edit `filter.py` to include all the necessary files (GPXfile, poi file)
  4. run `filter.py`
- 5. view output as csv or graphically with [umap](https://umap.openstreetmap.fr/es/map/new/)
+ 5. view output as csv or graphically with [umap](https://umap.openstreetmap.fr/es/map/new/) (`ctrl+I` import out.csv)
 
 ## possible future expansions:
 
