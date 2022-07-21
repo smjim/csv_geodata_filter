@@ -4,7 +4,7 @@
  - edit coords, radius, datafile in script and run
 
 ![imagen](https://user-images.githubusercontent.com/78174712/180298550-7f5bee8b-0a2a-4b86-9c32-b94272738f5d.png)
-[view fullscreen](umap.openstreetmap.fr/es/map/canada-trip_790135)
+[view fullscreen](https://umap.openstreetmap.fr/es/map/canada-trip_790135)
 
 ## howto:
 
