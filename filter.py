@@ -1,12 +1,19 @@
 from math import radians, cos, sin, asin, sqrt
 import pandas as pd
+import numpy as np
+import re
 
-df = pd.read_csv('../../data/mines_data.csv', index_col=0)
+# load waypoints from .gpx file into np arr `combined`
+GPXfile = '../../data/GraphHopper.gpx' 
+waypoints = open(GPXfile).read()
+lat = np.array(re.findall(r'lat="([^"]+)',waypoints),dtype=float)
+lon = np.array(re.findall(r'lon="([^"]+)',waypoints),dtype=float)
+combined = np.array(list(zip(lat,lon)))
+# points of interest
+poi = pd.read_csv('../../data/mines_data.csv', index_col=0)
 
-# center coords and exclusion radius 
-x = 35.9823474 
-y = -84.0694523
-radius = sqrt(44.0) #kilometers
+# exclusion radius
+radius = 20.0 #kilometers
 
 # use haversine formula to calculate distance between given and data coords
 # function from Michael Dunn (stackoverflow)
@@ -28,12 +35,22 @@ def haversine(lon1, lat1, lon2, lat2):
 
 # filter out data farther away than the radius permits
 # 'great circle' distance using haversine formula 
-df['distance'] = df.apply(lambda row : haversine(row['longitude'], row['latitude'], y, x), axis = 1)
-data = df[df['distance'] < radius**2]
+filtered = pd.DataFrame()
+def filter_data(pos):
+	global filtered
+	x = pos[0]
+	y = pos[1]
+	poi['distance'] = poi.apply(lambda row : haversine(row['longitude'], row['latitude'], y, x), axis = 1)
+	filtered = filtered.append(poi[poi['distance'] < radius])
+	print(filtered)
+
+np.apply_along_axis(filter_data, axis=1, arr=combined)
 
 # filter out 'problem_types'
-#data = data[data['problem_type'] == ('HEF' | 'P' | 'VO')]
-data = data[(data['problem_type'] == 'HEF') | (data['problem_type'] == 'P') | (data['problem_type'] == 'VO')]
+filtered = filtered[(filtered['problem_type'] == 'HEF') | (filtered['problem_type'] == 'P') | (filtered['problem_type'] == 'VO')]
 
-data.to_csv('out.csv')
+# eliminate duplicates
+filtered.drop_duplicates()
+
+filtered.to_csv('out.csv')
 print('Successfully generated out.csv')
